@@ -4,6 +4,8 @@ Fill-in templates for solo freelance web designers who sell website builds and r
 
 This pack is a document kit. It does not promise more clients, higher close rates, or any particular income.
 
+The repo also has a Next.js marketing site you can deploy to a free `*.vercel.app` URL, plus a script that builds zip-ready folders for each paid tier.
+
 ## Who it is for
 
 Freelancers who quote:
@@ -33,14 +35,16 @@ Everything in Starter, plus a statement of work and four follow-up emails.
 
 ### Full — $79
 
-Everything in Pro, plus a filled bakery example, a pre-send checklist, and draft landing-page copy.
+Everything in Pro, plus filled bakery examples, a pre-send checklist, and draft landing-page copy.
 
 - `templates/05-pre-send-checklist.md` — checks before you hit send
 - `examples/filled-proposal-example.md` — sample redesign proposal (not a real client)
 - `examples/filled-pricing-example.md` — sample pricing for the same bakery
-- `site/landing-copy.md` — draft sales-page copy if you list this pack later
+- `examples/filled-sow-example.md` — sample SOW for the same bakery
+- `examples/filled-follow-up-emails-example.md` — sample emails for the same bakery
+- `site/landing-copy.md` — draft sales-page copy (the live page reads from the same claims)
 
-## How to use
+## How to use the templates
 
 1. Make a folder for the lead: `[CLIENT NAME] — [PROJECT TYPE]`.
 2. Copy the templates you need into that folder.
@@ -79,6 +83,8 @@ This pack does not include contracts beyond the SOW draft, tax advice, or hostin
 ```
 web-designer-client-pack/
   README.md
+  LICENSE-USE.md
+  .env.example
   templates/
     01-proposal.md
     02-sow.md
@@ -88,9 +94,94 @@ web-designer-client-pack/
   examples/
     filled-proposal-example.md
     filled-pricing-example.md
+    filled-sow-example.md
+    filled-follow-up-emails-example.md
   site/
     landing-copy.md
+  src/                      # Next.js marketing site
+  scripts/
+    build-packs.mjs         # assembles public/downloads/{starter,pro,full}
+    verify-packs.mjs
+  public/downloads/         # zip-ready folders + .zip files (generated)
 ```
+
+## Build the three tier packs
+
+From the repo root:
+
+```bash
+npm install
+npm run build:packs
+npm run verify:packs
+```
+
+This writes zip-ready folders and archives:
+
+| Tier | Folder | Upload this zip to Gumroad |
+|------|--------|----------------------------|
+| Starter ($29) | `public/downloads/starter/` | `public/downloads/starter.zip` |
+| Pro ($49) | `public/downloads/pro/` | `public/downloads/pro.zip` |
+| Full ($79) | `public/downloads/full/` | `public/downloads/full.zip` |
+
+`npm run build` (including a Vercel build) runs `build:packs` first so the folders stay current.
+
+The marketing page does not give the paid zips away. They are here so you can upload them to Gumroad, or host them yourself later.
+
+## Marketing site — local
+
+```bash
+npm install
+cp .env.example .env.local
+# paste Gumroad URLs into .env.local
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Buy buttons read the env vars below. If a URL is missing, the button stays on the page (`#buy-starter`, `#buy-pro`, `#buy-full`) until you set it — no second code pass.
+
+## Where to set Gumroad URLs
+
+Create one Gumroad product per tier and paste the checkout URLs here:
+
+| Env var | Tier | Typical Gumroad URL |
+|---------|------|---------------------|
+| `NEXT_PUBLIC_GUMROAD_STARTER` | Starter $29 | `https://yourname.gumroad.com/l/your-starter-id` |
+| `NEXT_PUBLIC_GUMROAD_PRO` | Pro $49 | `https://yourname.gumroad.com/l/your-pro-id` |
+| `NEXT_PUBLIC_GUMROAD_FULL` | Full $79 | `https://yourname.gumroad.com/l/your-full-id` |
+
+Optional:
+
+| Env var | What it does |
+|---------|----------------|
+| `NEXT_PUBLIC_SUPPORT_EMAIL` | Shown in the FAQ refund answer and footer |
+| `NEXT_PUBLIC_SITE_URL` | Canonical / Open Graph base URL (otherwise Vercel’s URL is used) |
+
+Do not put Gumroad secrets, API keys, or webhook signing secrets in this repo. Checkout links are public by design. Use `.env.local` locally (gitignored) and Vercel env vars in production. `.env.example` lists the names only.
+
+## Deploy to Vercel (free `*.vercel.app`)
+
+1. Push this repo to GitHub (or GitLab / Bitbucket).
+2. In [Vercel](https://vercel.com), click **Add New… → Project** and import the repo.
+3. Framework preset: **Next.js**. Root directory: repo root. Build command: `npm run build`. Output: default (leave empty).
+4. Open **Settings → Environment Variables** and add, for Production, Preview, and Development:
+   - `NEXT_PUBLIC_GUMROAD_STARTER`
+   - `NEXT_PUBLIC_GUMROAD_PRO`
+   - `NEXT_PUBLIC_GUMROAD_FULL`
+   - `NEXT_PUBLIC_SUPPORT_EMAIL` (optional)
+   - `NEXT_PUBLIC_SITE_URL` (optional; e.g. `https://your-project.vercel.app`)
+5. Deploy. Vercel assigns a `https://<project>.vercel.app` URL.
+6. Redeploy after you change env vars so `NEXT_PUBLIC_*` values are baked into the client.
+
+CLI alternative if the Vercel CLI is installed and you are logged in:
+
+```bash
+npm i -g vercel
+vercel env add NEXT_PUBLIC_GUMROAD_STARTER
+vercel env add NEXT_PUBLIC_GUMROAD_PRO
+vercel env add NEXT_PUBLIC_GUMROAD_FULL
+vercel
+```
+
+No paid Vercel plan is required for this site.
 
 ## License for your use
 

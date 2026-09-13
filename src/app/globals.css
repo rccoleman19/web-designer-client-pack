@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3eee4;
+  --paper-deep: #e7dfd1;
+  --ink: #1b1814;
+  --ink-soft: #4a453c;
+  --rule: #cfc4b0;
+  --rust: #9c3b22;
+  --rust-deep: #7a2c18;
+  --cream: #fffaf1;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-rust: var(--rust);
+  --color-rust-deep: var(--rust-deep);
+  --color-cream: var(--cream);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: #e8c4b6;
+  color: var(--ink);
+}
+
+.letter-grid {
+  background-image:
+    linear-gradient(to right, rgba(27, 24, 20, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 24, 20, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.doc-shadow {
+  box-shadow:
+    0 1px 0 rgba(27, 24, 20, 0.06),
+    0 18px 40px -24px rgba(27, 24, 20, 0.45);
+}
+
+.stamp {
+  transform: rotate(-8deg);
+}
