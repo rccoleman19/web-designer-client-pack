@@ -1,15 +1,12 @@
+import { checkoutUrls, type TierId } from "./checkout";
+
+export { checkoutUrls };
+export type { TierId };
+
 function readPublicEnv(name: string): string {
   const value = process.env[name];
   return typeof value === "string" ? value.trim() : "";
 }
-
-export const checkoutUrls = {
-  starter: readPublicEnv("NEXT_PUBLIC_GUMROAD_STARTER"),
-  pro: readPublicEnv("NEXT_PUBLIC_GUMROAD_PRO"),
-  full: readPublicEnv("NEXT_PUBLIC_GUMROAD_FULL"),
-} as const;
-
-export type TierId = keyof typeof checkoutUrls;
 
 export const supportEmail = readPublicEnv("NEXT_PUBLIC_SUPPORT_EMAIL");
 
@@ -19,7 +16,9 @@ export const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000");
+      : process.env.GITHUB_PAGES === "true"
+        ? "https://rccoleman19.github.io/web-designer-client-pack"
+        : "http://localhost:3000");
 
 export const product = {
   name: "Web Designer Client Close Pack",

@@ -2,7 +2,7 @@
 
 Draft copy for a later sales page. Claims stay small: this is a document pack, not a coaching program and not a promise of revenue.
 
-The live Next.js page is the app in `src/`. Checkout links come from `NEXT_PUBLIC_GUMROAD_STARTER`, `NEXT_PUBLIC_GUMROAD_PRO`, and `NEXT_PUBLIC_GUMROAD_FULL`. Support email is `NEXT_PUBLIC_SUPPORT_EMAIL`. Do not invent testimonials or results.
+The live Next.js page is the app in `src/`. Checkout links come from `src/lib/checkout.ts` (build-time `NEXT_PUBLIC_GUMROAD_*` env vars, or hardcoded strings). Support email is `NEXT_PUBLIC_SUPPORT_EMAIL`. Do not invent testimonials or results.
 
 ---
 

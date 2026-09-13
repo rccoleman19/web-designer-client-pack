@@ -1,6 +1,7 @@
-import { checkoutUrls, type TierId } from "./config";
+import { checkoutHref, checkoutIsLive, type TierId } from "./checkout";
 
 export type { TierId };
+export { checkoutHref, checkoutIsLive };
 
 export const tiers: {
   id: TierId;
@@ -46,14 +47,6 @@ export const tiers: {
     ],
   },
 ];
-
-export function checkoutHref(id: TierId): string {
-  return checkoutUrls[id] || `#buy-${id}`;
-}
-
-export function checkoutIsLive(id: TierId): boolean {
-  return /^https?:\/\//i.test(checkoutUrls[id]);
-}
 
 export const filesInside = [
   {
