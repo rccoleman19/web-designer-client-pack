@@ -4,7 +4,11 @@ Fill-in templates for solo freelance web designers who sell website builds and r
 
 This pack is a document kit. It does not promise more clients, higher close rates, or any particular income.
 
-The repo also has a Next.js marketing site you can deploy to a free `*.vercel.app` URL, plus a script that builds zip-ready folders for each paid tier.
+The repo also has a Next.js marketing site. The free path that needs **no Vercel login** is GitHub Pages:
+
+**https://rccoleman19.github.io/web-designer-client-pack/**
+
+A script in this repo builds zip-ready folders for each paid tier. You can still deploy to a free `*.vercel.app` URL if you prefer Vercel.
 
 ## Who it is for
 
@@ -99,6 +103,8 @@ web-designer-client-pack/
   site/
     landing-copy.md
   src/                      # Next.js marketing site
+    lib/checkout.ts         # Gumroad buy-link constants (or env)
+  .github/workflows/pages.yml
   scripts/
     build-packs.mjs         # assembles public/downloads/{starter,pro,full}
     verify-packs.mjs
@@ -123,7 +129,7 @@ This writes zip-ready folders and archives:
 | Pro ($49) | `public/downloads/pro/` | `public/downloads/pro.zip` |
 | Full ($79) | `public/downloads/full/` | `public/downloads/full.zip` |
 
-`npm run build` (including a Vercel build) runs `build:packs` first so the folders stay current.
+`npm run build` (GitHub Pages, Vercel, or local) runs `build:packs` first, then writes a static site to `out/`.
 
 The marketing page does not give the paid zips away. They are here so you can upload them to Gumroad, or host them yourself later.
 
@@ -136,11 +142,14 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Buy buttons read the env vars below. If a URL is missing, the button stays on the page (`#buy-starter`, `#buy-pro`, `#buy-full`) until you set it — no second code pass.
+Open [http://localhost:3000](http://localhost:3000). Buy buttons read `src/lib/checkout.ts` (env first, then hardcoded strings). If a URL is missing, the button stays on the page (`#buy-starter`, `#buy-pro`, `#buy-full`) until you set it.
 
 ## Where to set Gumroad URLs
 
-Create one Gumroad product per tier and paste the checkout URLs here:
+Create one Gumroad product per tier. Static export bakes the links at build time. Use either:
+
+1. Env vars below (`.env.local`, Vercel env, or GitHub Actions **Variables**), or
+2. Paste the URLs into the empty `HARD_SET_*` strings in `src/lib/checkout.ts` and commit. Leave them as `""` until you have live product links.
 
 | Env var | Tier | Typical Gumroad URL |
 |---------|------|---------------------|
@@ -153,9 +162,20 @@ Optional:
 | Env var | What it does |
 |---------|----------------|
 | `NEXT_PUBLIC_SUPPORT_EMAIL` | Shown in the FAQ refund answer and footer |
-| `NEXT_PUBLIC_SITE_URL` | Canonical / Open Graph base URL (otherwise Vercel’s URL is used) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical / Open Graph base URL (Pages workflow sets the github.io URL; Vercel uses its URL if unset) |
 
-Do not put Gumroad secrets, API keys, or webhook signing secrets in this repo. Checkout links are public by design. Use `.env.local` locally (gitignored) and Vercel env vars in production. `.env.example` lists the names only.
+Do not put Gumroad secrets, API keys, or webhook signing secrets in this repo. Checkout links are public by design. Use `.env.local` locally (gitignored), GitHub Actions variables for Pages, and/or Vercel env vars if you deploy there. `.env.example` lists the names only.
+
+## Deploy to GitHub Pages (no Vercel login)
+
+This is the free path. `npm run build` produces a static `out/` folder. A workflow uploads that folder and deploys it with `actions/deploy-pages`.
+
+1. Push to `main` (or merge this change).
+2. In the repo on GitHub: **Settings → Pages → Source: GitHub Actions**.
+3. Open the **Actions** tab and confirm the **Deploy GitHub Pages** workflow ran.
+4. The live URL is **https://rccoleman19.github.io/web-designer-client-pack/**
+
+The workflow sets `GITHUB_PAGES=true` so asset paths use the `/web-designer-client-pack` base path. Optional checkout and support values can be set under **Settings → Secrets and variables → Actions → Variables** (`NEXT_PUBLIC_GUMROAD_STARTER`, `NEXT_PUBLIC_GUMROAD_PRO`, `NEXT_PUBLIC_GUMROAD_FULL`, `NEXT_PUBLIC_SUPPORT_EMAIL`). Redeploy (push or **Actions → Deploy GitHub Pages → Run workflow**) after you change variables or `src/lib/checkout.ts`.
 
 ## Deploy to Vercel (free `*.vercel.app`)
 
