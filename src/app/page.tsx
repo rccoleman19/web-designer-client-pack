@@ -223,8 +223,8 @@ export default function HomePage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-ink-soft">
-            Checkout opens Gumroad in a new tab once the product URLs are set.
-            Digital goods. No refunds after download.
+            Checkout opens Gumroad in a new tab. Digital goods. No refunds after
+            download.
           </p>
         </section>
 
